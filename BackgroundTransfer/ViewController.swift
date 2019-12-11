@@ -26,7 +26,7 @@ class ViewController: UIViewController, URLSessionTaskDelegate {
         try! data?.write(to: destinationUrl!)
         if err == nil {
           print("File downloaded successfully")
-          self.uploadFile()
+          self.uploadFile(taskID: "Background.Upload.01")
         }
       }
       
@@ -35,14 +35,14 @@ class ViewController: UIViewController, URLSessionTaskDelegate {
     }
   }
   
-  func uploadFile() {
+  func uploadFile(taskID: String) {
     let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first! as NSURL
     let destinationUrl = documentsUrl.appendingPathComponent("sampleFile")
     
     let uploadURL = URL(string: "http://speedtest.tele2.net/upload.php")
     var request = URLRequest(url: uploadURL!)
     request.httpMethod = "POST"
-    let config = URLSessionConfiguration.background(withIdentifier: "backgroundMeinBhejo")
+    let config = URLSessionConfiguration.background(withIdentifier: taskID)
     let session = URLSession(configuration: config, delegate: self, delegateQueue: nil)
     let uploadTask = session.uploadTask(with: request, fromFile: destinationUrl!)
     uploadTask.resume()
