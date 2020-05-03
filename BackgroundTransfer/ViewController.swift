@@ -17,13 +17,13 @@ class ViewController: UIViewController, URLSessionTaskDelegate {
 
     func downloadFile() {
         print("Going to execute: ", #function)
-        let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first! as NSURL
+        let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first! as URL
         let destinationUrl = documentsUrl.appendingPathComponent("sampleFile")
 
         // The files available are: 1MB   10MB   100MB   1GB   10GB   50GB   100GB   1000GB
         if let downloadUrl = URL(string: "http://speedtest.tele2.net/10MB.zip") {
             let downloadTask = URLSession.shared.dataTask(with: downloadUrl) { (data, response, err) in
-                try! data?.write(to: destinationUrl!)
+                try! data?.write(to: destinationUrl)
                 if err == nil {
                     print("File downloaded successfully")
                     self.uploadFile(taskID: "BackgroundUpload")
@@ -36,7 +36,7 @@ class ViewController: UIViewController, URLSessionTaskDelegate {
 
     func uploadFile(taskID: String) {
         print("Going to execute: ", #function)
-        let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first! as NSURL
+        let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first! as URL
         let destinationUrl = documentsUrl.appendingPathComponent("sampleFile")
 
         let uploadURL = URL(string: "http://speedtest.tele2.net/upload.php")
@@ -44,7 +44,7 @@ class ViewController: UIViewController, URLSessionTaskDelegate {
         request.httpMethod = "POST"
         let config = URLSessionConfiguration.background(withIdentifier: taskID)
         let session = URLSession(configuration: config, delegate: self, delegateQueue: nil)
-        let uploadTask = session.uploadTask(with: request, fromFile: destinationUrl!)
+        let uploadTask = session.uploadTask(with: request, fromFile: destinationUrl)
         uploadTask.resume()
     }
 
